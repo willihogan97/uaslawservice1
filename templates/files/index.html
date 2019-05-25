@@ -1,0 +1,137 @@
+
+{% load static %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+{% block content %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<div class="container" style="width:50%; padding-top: 20px">
+		<div class="row" style="padding-bottom: 10px">
+		    <div id="jam"></div>
+		</div>
+		<form method="post" enctype="multipart/form-data">
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<input type="text" class="form-control" name="username" id="username" placeholder="Enter Username">
+				</div>
+				<div class="form-group col-md-6">
+					<input type="password" class="form-control" name="password" id="password" placeholder="Enter Password">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="custom-file">
+					<input type="text" name="uploadedFile1" id="uploadedFile1" placeholder="Enter file 1">
+					<input type="text" name="uploadedFile2" id="uploadedFile2" placeholder="Enter file 2">
+					<input type="text" name="uploadedFile3" id="uploadedFile3" placeholder="Enter file 3">
+					<input type="text" name="uploadedFile4" id="uploadedFile4" placeholder="Enter file 4">
+					<input type="text" name="uploadedFile5" id="uploadedFile5" placeholder="Enter file 5">
+					<input type="text" name="uploadedFile6" id="uploadedFile6" placeholder="Enter file 6">
+					<input type="text" name="uploadedFile7" id="uploadedFile7" placeholder="Enter file 7">
+					<input type="text" name="uploadedFile8" id="uploadedFile8" placeholder="Enter file 8">
+					<input type="text" name="uploadedFile9" id="uploadedFile9" placeholder="Enter file 9">
+					<input type="text" name="uploadedFile10" id="uploadedFile10" placeholder="Enter file 10">
+					<!-- <input type="file" class="custom-file-input" name="uploadedFile" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+					<label class="custom-file-label" for="inputGroupFile01">Choose file</label> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">Upload</button>
+			</div>
+		</form>
+		<div class="progress">
+			<div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" id="uploaded">0%</div>
+		</div>
+		<!-- <div id="uploaded"></div> -->
+		<div >
+
+		</div>
+	</div>
+	
+	<script type = "text/javascript">
+	WebSocketTest();
+	function WebSocketTest() {
+
+		if ("WebSocket" in window) {
+			console.log("asd")
+			var ws_stomp_display = new SockJS( 'http://152.118.148.103:15674/stomp');
+			var client_display_s5 = Stomp.over(ws_stomp_display);
+			client_display_s5.heartbeat.outgoing = 60000; // client will send heartbeats every 20000ms
+    	client_display_s5.heartbeat.incoming = 60000;
+			var mq_queue_display = "/exchange/1506725003_fanout/stream";
+			
+			var on_connect_display_s5 = function() {
+				console.log('connected');
+				client_display_s5.subscribe(mq_queue_display_s5, on_message_display_s5);
+			};
+			var on_error_display_s5 = function() {
+				console.log('error');
+			};
+			var on_message_display_s5 = function(m) {
+				console.log('message received');
+				console.log("test" + m.body)				
+				$('#jam').html(m.body);
+			};
+			// client_display.connect('1506725003', '697670', on_connect_display, on_error_display, '1506725003');
+			client_display_s5.connect('1506725003', '697670', on_connect_display_s5, on_error_display_s5, '1506725003');
+		} else {
+			// The browser doesn't support WebSocket
+			alert("WebSocket NOT supported by your Browser!");
+		}	
+	}
+	</script>
+	
+	{% if uniqueId %}
+	<script type = "text/javascript">
+		WebSocketTest();
+		function WebSocketTest() {
+	
+			if ("WebSocket" in window) {
+				console.log("asd")
+				var ws_stomp_display = new SockJS( 'http://152.118.148.103:15674/stomp');
+				var client_display = Stomp.over(ws_stomp_display);
+				client_display.heartbeat.outgoing = 60000; // client will send heartbeats every 20000ms
+				client_display.heartbeat.incoming = 60000;
+				uniqueId = "{{ uniqueId }}"
+				var mq_queue_display = "/exchange/1506725003/" + uniqueId;
+				var mq_queue_display_s5 = "/exchange/1506725003/waktuServer";
+				
+				var on_connect_display = function() {
+					console.log('connected');
+					client_display.subscribe(mq_queue_display, on_message_display);
+				};
+				var on_error_display = function() {
+					console.log('error');
+				};
+				var on_message_display = function(m) {
+					console.log('message received');
+					$('#uploaded').html(m.body + "%")
+					$('#uploaded').css('width', m.body + "%")
+					// if(m.body.substring(m.body.length - 2, m.body.length) == "gz") {
+					// 	var newDownload = document.createElement("a");
+					// 	newDownload.href = "http://1506725003.law.infralabs.cs.ui.ac.id:20218/download/" + m.body;
+					// 	newDownload.download = true
+					// 	newDownload.click();
+					// } else {
+					// 	$('#uploaded').prepend("Uploading at " + m.body + " percent<br>");
+					// 	if(m.body == "100") {
+					// 		$('#uploaded').html("Your file have successfully uploaded" + "<br>");
+					// 	}
+					// }
+				};
+				client_display.connect('1506725003', '697670', on_connect_display, on_error_display, '1506725003');
+			} else {
+				// The browser doesn't support WebSocket
+				alert("WebSocket NOT supported by your Browser!");
+			}	
+		}
+		</script>
+	{% endif %}
+
+
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+  
+{% endblock %}
+
