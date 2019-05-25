@@ -76,8 +76,8 @@
 				console.log('message received');
 				console.log("test" + m.body)				
 				if(m.body.substring(0,6) == "/files") {
-					$('#download').html("http://host1506725003.proxy.infralabs.cs.ui.ac.id:21620" + m.body)
-					$('#adownload').attr("href" , "http://host1506725003.proxy.infralabs.cs.ui.ac.id:21620" + m.body)
+					$('#download').html("http://host1506725003.proxy.infralabs.cs.ui.ac.id:21720" + m.body)
+					$('#adownload').attr("href" , "http://host1506725003.proxy.infralabs.cs.ui.ac.id:21720" + m.body)
 				} else if(m.body.substring(0,6) == "persen") {
 					$('#uploaded').html(m.body.substring(6,m.body.length) + "%")
 					$('#uploaded').css('width', m.body.substring(6,m.body.length) + "%")	
