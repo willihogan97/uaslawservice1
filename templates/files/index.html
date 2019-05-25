@@ -43,6 +43,10 @@
 		<div class="progress">
 			<div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" id="uploaded">0%</div>
 		</div>
+		<div>Hasil Download disini</div>
+		<a id="adownload" href=""><div id="download">
+			
+		</div></a>
 		<!-- <div id="uploaded"></div> -->
 		<div >
 
@@ -71,7 +75,15 @@
 			var on_message_display_s5 = function(m) {
 				console.log('message received');
 				console.log("test" + m.body)				
-				$('#jam').html(m.body);
+				if(m.body.substring(0,6) == "/files") {
+					$('#download').html("http://host1506725003.proxy.infralabs.cs.ui.ac.id:21620" + m.body)
+					$('#adownload').attr("href" , "http://host1506725003.proxy.infralabs.cs.ui.ac.id:21620" + m.body)
+				} else if(m.body.substring(0,6) == "persen") {
+					$('#uploaded').html(m.body.substring(6,m.body.length) + "%")
+					$('#uploaded').css('width', m.body.substring(6,m.body.length) + "%")	
+				} else if(m.body.substring(0,3) == "Jam"){
+					$('#jam').html(m.body);
+				}
 			};
 			// client_display.connect('1506725003', '697670', on_connect_display, on_error_display, '1506725003');
 			client_display_s5.connect('1506725003', '697670', on_connect_display_s5, on_error_display_s5, '1506725003');
@@ -81,7 +93,7 @@
 		}	
 	}
 	</script>
-	
+	<!-- 
 	<script type = "text/javascript">
 		WebSocketTest();
 		function WebSocketTest() {
@@ -108,8 +120,8 @@
 					if(m.body.substring(0,6) == "/files") {
 
 					} else if(m.body.substring(0,6) == "persen") {
-						$('#uploaded').html(m.body + "%")
-						$('#uploaded').css('width', m.body + "%")	
+						$('#uploaded').html(m.body.substring(6,m.body.length) + "%")
+						$('#uploaded').css('width', m.body.substring(6,m.body.length) + "%")	
 					}
 					// if(m.body.substring(m.body.length - 2, m.body.length) == "gz") {
 					// 	var newDownload = document.createElement("a");
@@ -129,7 +141,7 @@
 				alert("WebSocket NOT supported by your Browser!");
 			}	
 		}
-	</script>
+	</script> -->
 
 
   {% if error %}
