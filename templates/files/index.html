@@ -75,7 +75,7 @@
 			var on_message_display_s5 = function(m) {
 				console.log('message received');
 				console.log("test" + m.body)				
-				if(m.body.substring(0,6) == "/files") {
+				if(m.body.substring(0,5) == "/down") {
 					$('#download').html("http://host1506725003.proxy.infralabs.cs.ui.ac.id:21720" + m.body)
 					$('#adownload').attr("href" , "http://host1506725003.proxy.infralabs.cs.ui.ac.id:21720" + m.body)
 				} else if(m.body.substring(0,6) == "persen") {
@@ -85,7 +85,6 @@
 					$('#jam').html(m.body);
 				}
 			};
-			// client_display.connect('1506725003', '697670', on_connect_display, on_error_display, '1506725003');
 			client_display_s5.connect('1506725003', '697670', on_connect_display_s5, on_error_display_s5, '1506725003');
 		} else {
 			// The browser doesn't support WebSocket
@@ -93,56 +92,6 @@
 		}	
 	}
 	</script>
-	<!-- 
-	<script type = "text/javascript">
-		WebSocketTest();
-		function WebSocketTest() {
-	
-			if ("WebSocket" in window) {
-				console.log("asd")
-				var ws_stomp_display = new SockJS( 'http://152.118.148.103:15674/stomp');
-				var client_display = Stomp.over(ws_stomp_display);
-				client_display.heartbeat.outgoing = 60000; // client will send heartbeats every 20000ms
-				client_display.heartbeat.incoming = 60000;
-				uniqueId = "{{ uniqueId }}"
-				var mq_queue_display = "/exchange/1506725003/" + uniqueId;
-				// var mq_queue_display_s5 = "/exchange/1506725003/waktuServer";
-				
-				var on_connect_display = function() {
-					console.log('connected');
-					client_display.subscribe(mq_queue_display, on_message_display);
-				};
-				var on_error_display = function() {
-					console.log('error');
-				};
-				var on_message_display = function(m) {
-					console.log('message received');
-					if(m.body.substring(0,6) == "/files") {
-
-					} else if(m.body.substring(0,6) == "persen") {
-						$('#uploaded').html(m.body.substring(6,m.body.length) + "%")
-						$('#uploaded').css('width', m.body.substring(6,m.body.length) + "%")	
-					}
-					// if(m.body.substring(m.body.length - 2, m.body.length) == "gz") {
-					// 	var newDownload = document.createElement("a");
-					// 	newDownload.href = "http://1506725003.law.infralabs.cs.ui.ac.id:20218/download/" + m.body;
-					// 	newDownload.download = true
-					// 	newDownload.click();
-					// } else {
-					// 	$('#uploaded').prepend("Uploading at " + m.body + " percent<br>");
-					// 	if(m.body == "100") {
-					// 		$('#uploaded').html("Your file have successfully uploaded" + "<br>");
-					// 	}
-					// }
-				};
-				client_display.connect('1506725003', '697670', on_connect_display, on_error_display, '1506725003');
-			} else {
-				// The browser doesn't support WebSocket
-				alert("WebSocket NOT supported by your Browser!");
-			}	
-		}
-	</script> -->
-
 
   {% if error %}
     <p>{{ error }}</p>
